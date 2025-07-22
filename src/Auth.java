@@ -17,7 +17,7 @@ public class Auth {
         String password = scan.nextLine();
 
         for (Admin a : StudentManager.admins){
-            if(Objects.equals(a.getUsername(), username) &&
+            if(Objects.equals(a.getUsername().toLowerCase(), username.toLowerCase()) &&
                     Objects.equals(a.getPassword(), password)){
                 return true;
             }
@@ -25,7 +25,7 @@ public class Auth {
         return false;
     }
 
-    static boolean studentAuth() {
+    static Boolean studentAuth() {
 
         System.out.print("\nEnter Your Name : ");
         String name = scan.nextLine();
@@ -33,8 +33,9 @@ public class Auth {
         int rollNo = scan.nextInt();
 
         for (Student s : StudentManager.students){
-            if(Objects.equals(s.getName(), name) &&
+            if(Objects.equals(s.getName().toLowerCase(), name.toLowerCase()) &&
                     Objects.equals(s.getRollNo(), rollNo)){
+                System.out.println("\n"+s);
                 return true;
             }
         }

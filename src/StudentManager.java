@@ -102,28 +102,11 @@ public class StudentManager{
                 }
                 break;
             case 2:
-                boolean studentViewing = Auth.studentAuth();
+                Boolean studentAuth =Auth.studentAuth();
 
-                if (!studentViewing){
-                    System.out.println("\nPermission Denied !\n");
-                    break;
+                if(!studentAuth) {
+                    System.out.println("Invalid credentials");
                 }
-
-                while (studentViewing) {
-                    System.out.println("\n1) view details\n2) exit\n");
-                    System.out.print("\nEnter you choice : ");
-                    int studentChoice = scan.nextInt();
-
-                    switch (studentChoice) {
-                        case 1:
-                            viewStudentByRollNo();
-                            break;
-                        case 2:
-                            studentViewing = false;
-                            break;
-                    }
-                }
-                break;
         }
     }
 
