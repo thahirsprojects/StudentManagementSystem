@@ -16,15 +16,15 @@ public class StudentManager{
 
         // sample students data
         Student student1 = new Student(123,"Arun", 19, "bca", "2023-2026");
-        Student student2 = new Student(124,"Nakul", 21, "bca", "2023-2026");
-        Student student3 = new Student(125,"Kunal", 26, "b.tech", "2023-2027");
-        Student student4 = new Student(126,"Suhail", 20, "bsc cs", "2023-2026");
-        Student student5 = new Student(127,"Hasan", 19, "bsc it", "2023-2026");
         students.add(student1);
-        students.add(student2);
-        students.add(student3);
-        students.add(student4);
-        students.add(student5);
+//        Student student2 = new Student(124,"Nakul", 21, "bca", "2023-2026");
+//        Student student3 = new Student(125,"Kunal", 26, "b.tech", "2023-2027");
+//        Student student4 = new Student(126,"Suhail", 20, "bsc cs", "2023-2026");
+//        Student student5 = new Student(127,"Hasan", 19, "bsc it", "2023-2026");
+//        students.add(student2);
+//        students.add(student3);
+//        students.add(student4);
+//        students.add(student5);
 
         // sample admin data
         Admin admin1 = new Admin("thahir","1a2b3c");
