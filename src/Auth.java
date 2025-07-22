@@ -1,0 +1,43 @@
+import Model.Admin;
+import Model.Student;
+
+import java.util.Objects;
+import java.util.Scanner;
+
+public class Auth {
+
+    static Scanner scan = new Scanner(System.in);
+
+
+    public static boolean adminAuth(){
+
+        System.out.print("\nEnter your username: ");
+        String username = scan.nextLine();
+        System.out.print("Enter the Password : ");
+        String password = scan.nextLine();
+
+        for (Admin a : StudentManager.admins){
+            if(Objects.equals(a.getUsername(), username) &&
+                    Objects.equals(a.getPassword(), password)){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    static boolean studentAuth() {
+
+        System.out.print("\nEnter Your Name : ");
+        String name = scan.nextLine();
+        System.out.print("\nEnter your Roll No : ");
+        int rollNo = scan.nextInt();
+
+        for (Student s : StudentManager.students){
+            if(Objects.equals(s.getName(), name) &&
+                    Objects.equals(s.getRollNo(), rollNo)){
+                return true;
+            }
+        }
+        return false;
+    }
+}

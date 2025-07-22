@@ -1,8 +1,13 @@
+import Model.Admin;
+import Model.Student;
+
+import java.io.Console;
 import java.util.*;
 
-public class StudentManager {
+public class StudentManager{
 
-    static List<Student> students = new ArrayList<>();
+    public static ArrayList<Admin> admins = new ArrayList<>();
+    public static ArrayList<Student> students = new ArrayList<>();
     static Scanner scan = new Scanner(System.in);
 
     public static void main(String[] args) {
@@ -10,28 +15,37 @@ public class StudentManager {
         printArt();
 
         // sample students data
-        Student student1 = new Student("Arun", 19, "bca", "2023-2026");
-        Student student2 = new Student("Nakul", 21, "bca", "2023-2026");
-        Student student3 = new Student("Kunal", 26, "b.tech", "2023-2027");
-        Student student4 = new Student("Suhail", 20, "bsc cs", "2023-2026");
-        Student student5 = new Student("Hasan", 19, "bsc it", "2023-2026");
+        Student student1 = new Student(123,"Arun", 19, "bca", "2023-2026");
+        Student student2 = new Student(124,"Nakul", 21, "bca", "2023-2026");
+        Student student3 = new Student(125,"Kunal", 26, "b.tech", "2023-2027");
+        Student student4 = new Student(126,"Suhail", 20, "bsc cs", "2023-2026");
+        Student student5 = new Student(127,"Hasan", 19, "bsc it", "2023-2026");
         students.add(student1);
         students.add(student2);
         students.add(student3);
         students.add(student4);
         students.add(student5);
 
+        // sample admin data
+        Admin admin1 = new Admin("thahir","1a2b3c");
+        admins.add(admin1);
+
         System.out.println("1) Admin\n2) Student\n");
         System.out.print("Enter your role : ");
         int role = scan.nextInt();
+        scan.nextLine();
 
         switch (role) {
             case 1:
-                boolean isAdmin = true;
+                boolean isAdmin = Auth.adminAuth();
+                if(!isAdmin){
+                    System.out.println("Permission denied !");
+                    break;
+                }
                 while (isAdmin) {
-                    System.out.println("1) Add new Student details\n2) Edit student details\n3) Delete student details\n4) View tudent details\n" +
-                            "5) Exit");
-                    System.out.print("Enter your choice : ");
+                    System.out.println("\n1) Add new Student details\n2) Edit student details\n3) Delete student details\n4) View student details\n" +
+                            "5) Manage Admin Accounts\n6) Exit");
+                    System.out.print("\nEnter your choice : ");
                     int adminChoice = scan.nextInt();
                     switch (adminChoice) {
                         case 1:
@@ -44,39 +58,65 @@ public class StudentManager {
                             deleteStudent();
                             break;
                         case 4:
-                            boolean viewStu = true;
-                            System.out.println("1) View details by student Id\n2) View all students\n3) Exit");
-                            System.out.println("Enter your choice : ");
+                            System.out.println("\n1) View details by student RollNo\n2) View all students\n3) Back\n4) Exit");
+                            System.out.print("\nEnter your choice : ");
                             int viewBy = scan.nextInt();
                             switch (viewBy) {
                                 case 1:
-                                    viewStudentById();
+                                    viewStudentByRollNo();
                                     break;
                                 case 2:
                                     viewStudents();
                                     break;
                                 case 3:
-                                    viewStu = false;
                                     break;
+                                case 4 :
+                                    return;
                             }
                             break;
-                        case 5:
+                        case 5 :
+                            System.out.println("\n1) View Admin Accounts\n2) Add Admins\n3) Remove Admin\n4) Back\n5) Exit");
+                            System.out.print("\nEnter your choice : ");
+                            int manage = scan.nextInt();
+                            switch (manage) {
+                                case 1:
+                                    viewAdmin();
+                                    break;
+                                case 2:
+                                    addAdmin();
+                                    break;
+                                case 3:
+                                    removeAdmin();
+                                    break;
+                                case 4 :
+                                    break;
+                                case 5:
+                                    return;
+                            }
+                            break;
+                        case 6 :
                             isAdmin = false;
                             break;
+
                     }
                 }
                 break;
             case 2:
-                boolean studentViewing = true;
-                System.out.println("1) view details\n 2) exit");
-                System.out.print("Enter you choice : ");
-                int studentChoice = scan.nextInt();
+                boolean studentViewing = Auth.studentAuth();
+
+                if (!studentViewing){
+                    System.out.println("\nPermission Denied !\n");
+                    break;
+                }
 
                 while (studentViewing) {
+                    System.out.println("\n1) view details\n2) exit\n");
+                    System.out.print("\nEnter you choice : ");
+                    int studentChoice = scan.nextInt();
 
                     switch (studentChoice) {
                         case 1:
-                            viewStudentById();
+                            viewStudentByRollNo();
                             break;
                         case 2:
                             studentViewing = false;
@@ -87,43 +127,74 @@ public class StudentManager {
         }
     }
 
-    private static void viewStudentById() {
-        System.out.println("STUDENT :");
-        int id = getStudentId();
+    private static void removeAdmin() {
+        System.out.println("\nREMOVE ADMIN\n");
+
+        scan.nextLine();
+        System.out.println("\nEnter username : ");
+        String username = scan.nextLine();
+        boolean found = false;
+
+        for (Admin a : admins){
+            if(Objects.equals(a.getUsername(), username)){
+                admins.remove(a);
+                found = true;
+                System.out.println("\nAdmin removed !");
+                break;
+            }
+        }
+
+        System.out.println();
+        if (!found) {
+            System.out.println("\nInvalid Username : Admin Not Found !\n\n");
+        }
+    }
+
+    private static void viewAdmin() {
+        for (Admin a : admins){
+            System.out.println(a);
+        }
+    }
+
+    private static void viewStudentByRollNo() {
+        System.out.println("\nSTUDENT :");
+        int rollNo = getStudentRollNo();
         boolean found = false;
         for (Student s : students) {
-            if (s.getId() == id) {
-                System.out.print("\nStudent found :");
+            if (s.getRollNo() == rollNo) {
+                System.out.print("\nStudent found :"+ s+"\n");
                 found = true;
-                System.out.println(s);
             }
         }
         if (!found) {
-            System.out.println("\nInvalid Id : Student Not Found !\n\n");
+            System.out.println("\nInvalid Id : Student Not Found !\n");
         }
     }
 
     private static void viewStudents() {
-        System.out.println("STUDENT LIST\n");
+        System.out.println("\nSTUDENT LIST\n");
         for (Student s : students) {
             System.out.println(s);
         }
-        System.out.println("\n\n");
+        System.out.println("\n");
     }
 
     private static void deleteStudent() {
-        System.out.println("DELETE STUDENT\n");
+        System.out.println("\nDELETE STUDENT\n");
 
-        int studentIdToDelete = getStudentId();
+        int studentToDelete = getStudentRollNo();
         boolean found = false;
 
-        Iterator<Student> iterator = students.iterator();
-        while (iterator.hasNext()) {
-            Student s = iterator.next();
-            if (s.getId() == studentIdToDelete) {
-                iterator.remove();
+
+        for (Student s : students){
+            if(s.getRollNo()==studentToDelete){
+                students.remove(s);
+                found = true;
+                System.out.println("\nStudent Deleted !");
+                break;
             }
         }
+
         System.out.println();
         if (!found) {
             System.out.println("\nInvalid Id : Student Not Found !\n\n");
@@ -131,11 +202,11 @@ public class StudentManager {
     }
 
     private static void editStudent() {
-        System.out.println("Edit STUDENT\n");
-        int studentIdToEdit = getStudentId();
+        System.out.println("\nEdit STUDENT\n");
+        int studentIdToEdit = getStudentRollNo();
         boolean found = false;
         for (Student s : students) {
-            if (s.getId() == studentIdToEdit) {
+            if (s.getRollNo() == studentIdToEdit) {
                 found = true;
                 scan.nextLine();
                 System.out.print("Enter name : ");
@@ -157,12 +228,23 @@ public class StudentManager {
             }
         }
         if (!found) {
-            System.out.println("Invalid Id : Student Not Found !\n\n");
+            System.out.println("Invalid RollNo : Student Not Found !\n\n");
         }
     }
 
     private static void addStudent() {
-        System.out.println("ADD STUDENT");
+        System.out.println("\nADD STUDENT");
+        scan.nextLine();
+        System.out.print("Enter Roll No : ");
+        int rollNo = scan.nextInt();
+
+        for (Student s : students){
+            if (s.getRollNo()==rollNo){
+                System.out.println("\nRollNo Exists !");
+                return;
+            }
+        }
+
         scan.nextLine();
         System.out.print("Enter name : ");
         String name = scan.nextLine();
@@ -174,15 +256,35 @@ public class StudentManager {
         System.out.print("Enter Batch: ");
         String batch = scan.nextLine();
 
-        Student student = new Student(name, age, course, batch);
+        Student student = new Student(rollNo,name, age, course, batch);
         students.add(student);
-        System.out.println("Generated STUDENT ID : "+student.getId());
         System.out.println("\nStudent Added Successfully...\n\n");
     }
 
-    public static int getStudentId() {
-        System.out.print("Enter the student id : ");
+    public static int getStudentRollNo() {
+        System.out.print("Enter the student Rollno : ");
         return scan.nextInt();
+    }
+
+    public static void addAdmin(){
+        System.out.print("\nEnter a user name for admin : ");
+        String username = scan.nextLine();
+        scan.nextLine();
+
+        for (Admin a : admins){
+            if (Objects.equals(a.getUsername(), username)) {
+                System.out.println("USERNAME EXISTS !");
+                return;
+            }
+        }
+
+        System.out.print("Enter the Password : ");
+        String password = scan.nextLine();
+
+        Admin admin = new Admin(username,password);
+        admins.add(admin);
+
+        System.out.println("ADMIN ADDED SUCCESSFULLY ....\n");
     }
 
     private static void printArt() {
@@ -201,4 +303,5 @@ public class StudentManager {
                 " */\n @thahirsprojects");
     }
 }
+
 

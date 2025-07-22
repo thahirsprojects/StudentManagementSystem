@@ -1,14 +1,18 @@
+package Model;
+
 public class Student {
 
     private int id;
+    private int rollNo;
     private String name;
     private int age;
     private String course;
     private String batch;
     static int idCounter = 0;
 
-    public Student(String name, int age, String course, String batch) {
+    public Student(int rollNo,String name, int age, String course, String batch) {
         this.id = ++idCounter;
+        this.rollNo = rollNo;
         this.name = name;
         this.age = age;
         this.course = course;
@@ -51,14 +55,18 @@ public class Student {
         this.batch = batch;
     }
 
+    public int getRollNo() {
+        return rollNo;
+    }
+
     @Override
     public String toString() {
         return "[" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", age=" + age +
-                ", course='" + course + '\'' +
-                ", batch='" + batch + '\'' +
+                "rollNo=" + rollNo +
+                ", Name='" + name + '\'' +
+                ", Age=" + age +
+                ", Course='" + course + '\'' +
+                ", Batch='" + batch + '\'' +
                 ']';
     }
 }
